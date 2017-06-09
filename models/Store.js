@@ -42,4 +42,13 @@ storeSchema.pre('save', function(next) {
   next()
 })
 
+storeSchema.statics.getTagsList = function() {
+  return this.aggregate([
+    { $unwind: '$tags'},
+    { $group: { _id: '$tags', count: {$sum: 1}}},
+    { $sort: {order: 1}}
+
+  ])
+}
+
 module.exports = mongoose.model('Store', storeSchema)
